@@ -76,14 +76,14 @@ rollup.config.mjs already exists
 npx clasp login
 ```
 
-5. 環境変数として、Google Calender IDを配列で設定(複数指定できるよう配列にしているだけなので、配列の中身は単一でも問題ありません)
+5. 環境変数として、ホームラベル及びLINE Notifyのトークンを設定
 
-```bash
+```bas5
 export HOME_LABEL_ARRAY="['sampleA','sampleB','sampleC']"
 export LINE_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
-1. 5/6で指定した環境変数を使用し、GAS実行用ファイルである`src/index.ts`を作成
+6. 5で指定した環境変数を使用し、GAS実行用ファイルである`src/index.ts`を作成
 
 ```bash
 cat <<EOF > src/index.ts
@@ -98,7 +98,7 @@ function handler(): void {
 EOF
 ```
 
-8. GASアプリをデプロイ
+7. GASアプリをデプロイ
 
 ```bash
 npm run deploy
