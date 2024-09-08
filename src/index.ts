@@ -14,21 +14,7 @@
  * limitations under the License.
  */
 
-// LINEアクセストークンの個数(必要に応じて調整してください)
-const numLineTokens = 3;
-
-// ヘッダー行の値
-const headers = [
-  'LINE Access Token',
-  'Gmail Label Name 1',
-  'Gmail Label Name 2',
-  'Gmail Label Name 3',
-  'Gmail Label Name 4',
-  'Gmail Label Name 5',
-];
-
-// ヘッダー行の値の個数
-const numHeaders = headers.length;
+import { bodyMaxLength, numberOfLabels, numberOfTokens } from './env';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function onOpen() {
@@ -59,14 +45,22 @@ function writePropertyToSheet1(): void {
   const sheetName = 'プロパティ';
   sheet.setName(sheetName);
 
+  // ヘッダー行の値を動的に生成
+  const tokenHeader = ['LINE Access Token'];
+  const labelHeaders = Array.from(
+    { length: numberOfLabels },
+    (_, i) => `Gmail Label Name ${i + 1}`
+  );
+  const headers = tokenHeader.concat(labelHeaders);
+
   // ヘッダー行を設定
-  const headerRange = sheet.getRange(1, 1, 1, numHeaders);
+  const headerRange = sheet.getRange(1, 1, 1, numberOfLabels + 1);
   headerRange.setValues([headers]);
   headerRange.setFontWeight('bold');
   headerRange.setBackground('lightblue');
 
   // すべてのセルの範囲を取得
-  const allRange = sheet.getRange(1, 1, numLineTokens + 1, numHeaders);
+  const allRange = sheet.getRange(1, 1, numberOfTokens + 1, numberOfLabels + 1);
 
   // すべてのセルに枠線を設定
   allRange.setBorder(
@@ -81,37 +75,9 @@ function writePropertyToSheet1(): void {
   );
 
   // 列の幅を自動調整
-  sheet.autoResizeColumns(1, numHeaders);
+  sheet.autoResizeColumns(1, numberOfLabels + 1);
 
   console.log('プロパティシートが作成されました。');
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function setupOrUpdateTrigger() {
-  // 1時間ごとのトリガーを設定
-  const triggers = ScriptApp.getProjectTriggers();
-  let mainTriggerExists = false;
-
-  // 既存のmain関数のトリガーを確認
-  triggers.forEach(trigger => {
-    if (trigger.getHandlerFunction() === 'main') {
-      mainTriggerExists = true;
-      // トリガーの設定が1時間ごとでない場合は更新
-      if (
-        trigger.getEventType() !== ScriptApp.EventType.CLOCK ||
-        trigger.getTriggerSource() !== ScriptApp.TriggerSource.CLOCK
-      ) {
-        ScriptApp.deleteTrigger(trigger);
-        mainTriggerExists = false;
-      }
-    }
-  });
-
-  // main関数のトリガーが存在しない場合は新規作成
-  if (!mainTriggerExists) {
-    ScriptApp.newTrigger('main').timeBased().everyHours(1).create();
-    console.log('1時間ごとのトリガーが設定されました。');
-  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -121,7 +87,7 @@ function main(): void {
   const sheet = spreadsheet.getActiveSheet();
 
   // ヘッダー行の次の行からLINEアクセストークン毎に繰り返し処理を実施
-  for (let i = 2; i <= numLineTokens + 1; i++) {
+  for (let i = 2; i <= numberOfTokens + 1; i++) {
     // A列のセルよりLINE Notifyトークンを取得
     const lineToken = sheet.getRange(i, 1).getValue();
     // const lineToken = sheet.getRange(`A${i}`).getValue();
@@ -129,7 +95,7 @@ function main(): void {
     // 該当行のA列にLINE Notifyトークンがある場合、同じ行に存在するB-F列のラベル名を取得して処理
     if (lineToken) {
       const homeLabelArray = sheet
-        .getRange(i, 2, 1, numHeaders - 1)
+        .getRange(i, 2, 1, numberOfLabels)
         .getValues()
         .flat()
         .filter(label => label.trim() !== '');
@@ -190,7 +156,7 @@ function gmailToString(mail: GoogleAppsScript.Gmail.GmailMessage): string {
   // メールの情報を取得
   const mailFrom: string = mail.getFrom();
   const subject: string = mail.getSubject();
-  const body: string = mail.getPlainBody().slice(0, 300);
+  const body: string = mail.getPlainBody().slice(0, bodyMaxLength);
 
   return Utilities.formatString(
     // 送信者、件名、内容を整形
@@ -215,4 +181,32 @@ function sendLine(message: string, lineToken: string): void {
 
   // 送信
   UrlFetchApp.fetch('https://notify-api.line.me/api/notify', options);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function setupOrUpdateTrigger() {
+  // 1時間ごとのトリガーを設定
+  const triggers = ScriptApp.getProjectTriggers();
+  let mainTriggerExists = false;
+
+  // 既存のmain関数のトリガーを確認
+  triggers.forEach(trigger => {
+    if (trigger.getHandlerFunction() === 'main') {
+      mainTriggerExists = true;
+      // トリガーの設定が1時間ごとでない場合は更新
+      if (
+        trigger.getEventType() !== ScriptApp.EventType.CLOCK ||
+        trigger.getTriggerSource() !== ScriptApp.TriggerSource.CLOCK
+      ) {
+        ScriptApp.deleteTrigger(trigger);
+        mainTriggerExists = false;
+      }
+    }
+  });
+
+  // main関数のトリガーが存在しない場合は新規作成
+  if (!mainTriggerExists) {
+    ScriptApp.newTrigger('main').timeBased().everyHours(1).create();
+    console.log('1時間ごとのトリガーが設定されました。');
+  }
 }
