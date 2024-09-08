@@ -76,30 +76,22 @@ rollup.config.mjs already exists
 npx clasp login
 ```
 
-5. 環境変数として、ホームラベル及びLINE Notifyのトークンを設定
-
-```bas5
-export HOME_LABEL_ARRAY="['sampleA','sampleB','sampleC']"
-export LINE_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-```
-
-6. 5で指定した環境変数を使用し、GAS実行用ファイルである`src/index.ts`を作成
-
-```bash
-cat <<EOF > src/index.ts
-import { main } from './example-module';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function handler(): void {
-  main(
-    ${HOME_LABEL_ARRAY},
-    "${LINE_TOKEN}"
-}
-EOF
-```
-
-7. GASアプリをデプロイ
+5. GASアプリをデプロイ
 
 ```bash
 npm run deploy
 ```
+
+6. 以下コマンドでスプレッドシートを開く
+
+```bash
+npx clasp open --addon
+```
+
+7. 「プロパティ」シートのA列にLINE Notifyのトークンを記入
+
+8. 「プロパティ」シートのB-F列に通知するGmailのラベル名を記入(最大5つ)
+
+9. スプレッドシート上部のカスタムメニューにて「通知テストの実施」をクリックし、指定したラベル名のメールが特定のLINE Notifyにより通知される事を確認
+
+10. スプレッドシート上部のカスタムメニューにて「通知トリガーを1時間で設定」をクリックすると、通知トリガーが1時間毎に設定される

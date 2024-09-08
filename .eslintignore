@@ -1,3 +1,5 @@
 node_modules/*
 build/*
 testing
+**/node_modules/*
+**/dist/*
