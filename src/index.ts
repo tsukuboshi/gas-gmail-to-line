@@ -57,12 +57,17 @@ function writePropertyToSheet1(): void {
   const headerRange = sheet.getRange(1, 1, 1, numberOfLabels + 1);
   headerRange.setValues([headers]);
   headerRange.setFontWeight('bold');
-  headerRange.setBackground('lightblue');
+
+  // ヘッダー行トークン列の色を設定
+  const tokenHeaderRange = sheet.getRange(1, 1, 1, 1);
+  tokenHeaderRange.setBackground('lightgreen');
+
+  // ヘッダー行ラベル列の色を設定
+  const labelHeadersRange = sheet.getRange(1, 2, 1, numberOfLabels);
+  labelHeadersRange.setBackground('lightyellow');
 
   // すべてのセルの範囲を取得
   const allRange = sheet.getRange(1, 1, numberOfTokens + 1, numberOfLabels + 1);
-
-  // すべてのセルに枠線を設定
   allRange.setBorder(
     true,
     true,
