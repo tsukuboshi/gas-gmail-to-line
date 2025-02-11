@@ -46,7 +46,7 @@ function writePropertyToSheet1(): void {
   sheet.setName(sheetName);
 
   // ヘッダー行の値を動的に生成
-  const tokenHeader = ['LINE Access Token'];
+  const tokenHeader = ['LINE Channel Access Token'];
   const labelHeaders = Array.from(
     { length: numberOfLabels },
     (_, i) => `Gmail Label Name ${i + 1}`
@@ -93,11 +93,11 @@ function main(): void {
 
   // ヘッダー行の次の行からLINEアクセストークン毎に繰り返し処理を実施
   for (let i = 2; i <= numberOfTokens + 1; i++) {
-    // A列のセルよりLINE Notifyトークンを取得
+    // A列のセルよりLINEトークンを取得
     const lineToken = sheet.getRange(i, 1).getValue();
     // const lineToken = sheet.getRange(`A${i}`).getValue();
 
-    // 該当行のA列にLINE Notifyトークンがある場合、同じ行に存在するB-F列のラベル名を取得して処理
+    // 該当行のA列にLINEトークンがある場合、同じ行に存在するB-F列のラベル名を取得して処理
     if (lineToken) {
       const homeLabelArray = sheet
         .getRange(i, 2, 1, numberOfLabels)
@@ -172,20 +172,46 @@ function gmailToString(mail: GoogleAppsScript.Gmail.GmailMessage): string {
   );
 }
 
-// LINEヘ送信する関数
-function sendLine(message: string, lineToken: string): void {
+// LINE Notifyヘ送信する関数
+// function sendLine(message: string, accessToken: string): void {
+//   // 送信内容
+//   const payload = { message: message };
+
+//   // 送信オプション
+//   const options: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
+//     method: 'post',
+//     headers: { Authorization: 'Bearer ' + accessToken },
+//     payload: payload,
+//   };
+
+//   // 送信
+//   UrlFetchApp.fetch('https://notify-api.line.me/api/notify', options);
+// }
+
+// LINE Botヘ送信する関数
+function sendLine(message: string, channelAccessToken: string): void {
   // 送信内容
-  const payload = { message: message };
+  const payload = {
+    messages: [
+      {
+        type: 'text',
+        text: message,
+      },
+    ],
+  };
 
   // 送信オプション
   const options: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
     method: 'post',
-    headers: { Authorization: 'Bearer ' + lineToken },
-    payload: payload,
+    headers: {
+      'Authorization': 'Bearer ' + channelAccessToken,
+      'Content-Type': 'application/json',
+    },
+    payload: JSON.stringify(payload),
   };
 
   // 送信
-  UrlFetchApp.fetch('https://notify-api.line.me/api/notify', options);
+  UrlFetchApp.fetch('https://api.line.me/v2/bot/message/broadcast', options);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
