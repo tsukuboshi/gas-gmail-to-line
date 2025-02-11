@@ -17,7 +17,7 @@ limitations under the License.
 
 ## 概要
 
-Gmailの特定のラベルのメールを確認し、未読であればLINE Notifyに通知した上で既読をつけるGoogle Apps ScriptをTypeScriptで実装しています。
+Gmailの特定のラベルのメールを確認し、未読であればLINEに通知した上で既読をつけるGoogle Apps ScriptをTypeScriptで実装しています。
 
 ## 前提条件
 
@@ -88,7 +88,7 @@ npm run deploy
 npx clasp open --addon
 ```
 
-7. 「プロパティ」シートのA列にLINE Notifyのトークンを記入
+7. 「プロパティ」シートのA列にLINEトークンを記入
 
 8. 「プロパティ」シートのB-F列に通知するGmailのラベル名を記入(最大5つ)
 
