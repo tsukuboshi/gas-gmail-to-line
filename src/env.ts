@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// LINEアクセストークンの個数
+// LINEチャネルアクセストークンの個数
 export const numberOfTokens = 4;
 
 // Gmailラベルの個数

@@ -91,13 +91,13 @@ function main(): void {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = spreadsheet.getActiveSheet();
 
-  // ヘッダー行の次の行からLINEアクセストークン毎に繰り返し処理を実施
+  // ヘッダー行の次の行からLINEチャネルアクセストークン毎に繰り返し処理を実施
   for (let i = 2; i <= numberOfTokens + 1; i++) {
-    // A列のセルよりLINEトークンを取得
+    // A列のセルよりLINEチャネルアクセストークンを取得
     const lineToken = sheet.getRange(i, 1).getValue();
     // const lineToken = sheet.getRange(`A${i}`).getValue();
 
-    // 該当行のA列にLINEトークンがある場合、同じ行に存在するB-F列のラベル名を取得して処理
+    // 該当行のA列にLINEチャネルアクセストークンがある場合、同じ行に存在するB-F列のラベル名を取得して処理
     if (lineToken) {
       const homeLabelArray = sheet
         .getRange(i, 2, 1, numberOfLabels)
@@ -171,22 +171,6 @@ function gmailToString(mail: GoogleAppsScript.Gmail.GmailMessage): string {
     body
   );
 }
-
-// LINE Notifyヘ送信する関数
-// function sendLine(message: string, accessToken: string): void {
-//   // 送信内容
-//   const payload = { message: message };
-
-//   // 送信オプション
-//   const options: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
-//     method: 'post',
-//     headers: { Authorization: 'Bearer ' + accessToken },
-//     payload: payload,
-//   };
-
-//   // 送信
-//   UrlFetchApp.fetch('https://notify-api.line.me/api/notify', options);
-// }
 
 // LINE Botヘ送信する関数
 function sendLine(message: string, channelAccessToken: string): void {
