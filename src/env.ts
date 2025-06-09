@@ -61,13 +61,14 @@ export const SHEET_SETTINGS = {
 // メッセージフォーマット設定
 export const MESSAGE_FORMAT = {
   SEPARATOR: '\n\n', // セクション区切り文字
-  SUBJECT_PREFIX: '件名：', // 件名プレフィックス
-  CONTENT_PREFIX: '内容：', // 内容プレフィックス
+  SENDER_PREFIX: '📧 送信者：', // 送信者プレフィックス
+  SUBJECT_PREFIX: '📋 件名：', // 件名プレフィックス
+  CONTENT_PREFIX: '📄 内容：', // 内容プレフィックス
 } as const;
 
 // API呼び出し設定
 export const API_SETTINGS = {
-  REQUEST_DELAY: 100, // API呼び出し間の待機時間（ミリ秒）
+  REQUEST_DELAY: 0, // API呼び出し間の待機時間（ミリ秒）
   MAX_RETRIES: 3, // 最大リトライ回数
   TIMEOUT: 30000, // タイムアウト時間（ミリ秒）
 } as const;

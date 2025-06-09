@@ -144,8 +144,9 @@ describe('gmail-to-line', () => {
   describe('メッセージフォーマット設定のテスト', () => {
     it('メッセージフォーマットが正しい', () => {
       expect(MESSAGE_FORMAT.SEPARATOR).toBe('\n\n');
-      expect(MESSAGE_FORMAT.SUBJECT_PREFIX).toBe('件名：');
-      expect(MESSAGE_FORMAT.CONTENT_PREFIX).toBe('内容：');
+      expect(MESSAGE_FORMAT.SENDER_PREFIX).toBe('📧 送信者：');
+      expect(MESSAGE_FORMAT.SUBJECT_PREFIX).toBe('📋 件名：');
+      expect(MESSAGE_FORMAT.CONTENT_PREFIX).toBe('📄 内容：');
     });
 
     it('メッセージの組み立てが正しく動作する', () => {
@@ -153,13 +154,14 @@ describe('gmail-to-line', () => {
       const subject = 'テスト件名';
       const body = 'テスト本文';
 
-      const formattedMessage = `\n${from}${MESSAGE_FORMAT.SEPARATOR}${MESSAGE_FORMAT.SUBJECT_PREFIX}${MESSAGE_FORMAT.SEPARATOR}${subject}${MESSAGE_FORMAT.SEPARATOR}${MESSAGE_FORMAT.CONTENT_PREFIX}${MESSAGE_FORMAT.SEPARATOR}${body}`;
+      const formattedMessage = `\n${MESSAGE_FORMAT.SENDER_PREFIX}${MESSAGE_FORMAT.SEPARATOR}${from}${MESSAGE_FORMAT.SEPARATOR}${MESSAGE_FORMAT.SUBJECT_PREFIX}${MESSAGE_FORMAT.SEPARATOR}${subject}${MESSAGE_FORMAT.SEPARATOR}${MESSAGE_FORMAT.CONTENT_PREFIX}${MESSAGE_FORMAT.SEPARATOR}${body}`;
 
       expect(formattedMessage).toContain(from);
       expect(formattedMessage).toContain(subject);
       expect(formattedMessage).toContain(body);
-      expect(formattedMessage).toContain('件名：');
-      expect(formattedMessage).toContain('内容：');
+      expect(formattedMessage).toContain('📧 送信者：');
+      expect(formattedMessage).toContain('📋 件名：');
+      expect(formattedMessage).toContain('📄 内容：');
     });
   });
 

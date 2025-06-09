@@ -225,7 +225,9 @@ function gmailToFormattedMessage(
 
     // フォーマット済みテキストを作成
     const formattedText = Utilities.formatString(
-      '\n%s%s%s%s%s%s%s',
+      '\n%s%s%s%s%s%s%s%s%s%s%s',
+      MESSAGE_FORMAT.SENDER_PREFIX,
+      MESSAGE_FORMAT.SEPARATOR,
       from,
       MESSAGE_FORMAT.SEPARATOR,
       MESSAGE_FORMAT.SUBJECT_PREFIX,
