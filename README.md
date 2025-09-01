@@ -185,7 +185,3 @@ ESLint で TypeScript バージョンの警告が表示される場合があり�
 - **API URL**: `https://api.line.me/v2/bot/message/broadcast`（ブロードキャスト配信）
 - **送信形式**: JSON形式のメッセージオブジェクト
 - **認証**: Bearer Token方式
-
-## ライセンス
-
-Apache License 2.0
