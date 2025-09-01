@@ -24,7 +24,7 @@ export const NUMBER_OF_TOKENS = 4;
 export const NUMBER_OF_LABELS = 6;
 
 // メール本文の最大文字数
-export const BODY_MAX_LENGTH = 500;
+export const BODY_MAX_LENGTH = 1000;
 
 // スプレッドシートの列定義
 export const SPREADSHEET_COLUMNS = {
