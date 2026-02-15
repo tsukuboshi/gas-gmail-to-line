@@ -6,4 +6,3 @@ build/
 *.tgz
 # Local env files
 .vscode/
-package-lock.json
